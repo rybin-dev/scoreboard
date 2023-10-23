@@ -44,7 +44,7 @@
         <div>
             <c:forEach var="counter" begin="1" end="${requestScope.pageMatch.countPage}">
                 <a href="${pageContext.request.contextPath}/matches?page=${counter}<c:if test="${pageScope.param.playerName != null}" >&playerName=${pageScope.param.playerName}</c:if>">
-                        ${counter}
+                        |${counter}|
                 </a>
 
             </c:forEach>

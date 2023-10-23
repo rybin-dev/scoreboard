@@ -31,10 +31,13 @@ public class CreateMatchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CreateMatchDto createMatchDto = new CreateMatchDto(
-                req.getParameter("first"),
-                req.getParameter("second")
-        );
+        String first = req.getParameter("first");
+        String second = req.getParameter("second");
+
+        first = first != null ? first.trim() : null;
+        second= second != null ? second.trim() : null;
+
+        CreateMatchDto createMatchDto = new CreateMatchDto(first , second);
 
         try {
             OngoingMatch math = ongoingMatchesService.createMath(createMatchDto);

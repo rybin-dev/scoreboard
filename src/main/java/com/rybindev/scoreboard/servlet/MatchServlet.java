@@ -32,7 +32,7 @@ public class MatchServlet extends HttpServlet {
             matchFilter.setPage(Integer.parseInt(page));
         }
         if (playerName != null && !playerName.isEmpty()) {
-            matchFilter.setPlayerName(playerName);
+            matchFilter.setPlayerName(playerName.trim());
         }
 
         req.setAttribute("pageMatch", matchService.findAll(matchFilter));
