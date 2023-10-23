@@ -19,8 +19,8 @@ public class ErrorHandlerServlet extends HttpServlet {
 
     public void handleRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-        Integer statusCode = (Integer) req.getAttribute("jakarta.servlet.error.status_code");
-        // String servletName = (String) request.getAttribute("jakarta.servlet.error.servlet_name");
+       // Integer statusCode = (Integer) req.getAttribute("jakarta.servlet.error.status_code");
+       // String servletName = (String) req.getAttribute("jakarta.servlet.error.servlet_name");
         Throwable throwable = (Throwable) req.getAttribute("jakarta.servlet.error.exception");
 
 
@@ -28,6 +28,9 @@ public class ErrorHandlerServlet extends HttpServlet {
 
             if (OngoingMatchNotFoundException.class == throwable.getClass()){
                 resp.sendRedirect("matches");
+            }else {
+              resp.sendRedirect("error.jsp");
+
             }
 
         }

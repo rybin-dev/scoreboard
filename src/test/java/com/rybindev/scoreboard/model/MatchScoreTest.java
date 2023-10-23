@@ -1,9 +1,8 @@
 package com.rybindev.scoreboard.model;
 
+import com.rybindev.scoreboard.model.score.MatchScore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MatchScoreTest {
 

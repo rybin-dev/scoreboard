@@ -1,10 +1,6 @@
 package com.rybindev.scoreboard.servlet;
 
-import com.rybindev.scoreboard.mapper.ScoreboardMapper;
-import com.rybindev.scoreboard.model.EPlayer;
 import com.rybindev.scoreboard.model.MatchFilter;
-import com.rybindev.scoreboard.model.OngoingMatch;
-import com.rybindev.scoreboard.repository.MatchRepository;
 import com.rybindev.scoreboard.service.MatchService;
 import com.rybindev.scoreboard.util.JspHelper;
 import jakarta.servlet.ServletException;
@@ -21,8 +17,7 @@ public class MatchServlet extends HttpServlet {
 
 
     @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init() {
         matchService = (MatchService) getServletContext().getAttribute(MatchService.class.getName());
     }
 
@@ -33,14 +28,14 @@ public class MatchServlet extends HttpServlet {
 
         MatchFilter matchFilter = new MatchFilter();
 
-        if (page != null && page.matches("\\d{1,9}")) {
+        if (page != null && page.matches("\\d{1,9}+")) {
             matchFilter.setPage(Integer.parseInt(page));
         }
-        if (playerName != null) {
+        if (playerName != null && !playerName.isEmpty()) {
             matchFilter.setPlayerName(playerName);
         }
 
-        req.setAttribute("matches", matchService.findAll(matchFilter));
+        req.setAttribute("pageMatch", matchService.findAll(matchFilter));
         req.getRequestDispatcher(JspHelper.get("matches")).forward(req, resp);
     }
 

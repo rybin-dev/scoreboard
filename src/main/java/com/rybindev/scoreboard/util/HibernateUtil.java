@@ -5,6 +5,7 @@ import java.util.Properties;
 import com.rybindev.scoreboard.entity.Match;
 import com.rybindev.scoreboard.entity.Player;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
@@ -33,6 +34,7 @@ public class HibernateUtil {
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
                 configuration.setProperties(settings);
+                configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
                 configuration.addAnnotatedClass(Player.class);
                 configuration.addAnnotatedClass(Match.class);
 

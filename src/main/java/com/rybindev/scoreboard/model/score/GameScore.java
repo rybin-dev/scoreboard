@@ -1,4 +1,6 @@
-package com.rybindev.scoreboard.model;
+package com.rybindev.scoreboard.model.score;
+
+import com.rybindev.scoreboard.model.EPlayer;
 
 public class GameScore extends BaseScore {
 

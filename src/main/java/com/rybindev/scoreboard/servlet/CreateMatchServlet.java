@@ -1,5 +1,7 @@
 package com.rybindev.scoreboard.servlet;
 
+import com.rybindev.scoreboard.exception.ValidationException;
+import com.rybindev.scoreboard.model.CreateMatchDto;
 import com.rybindev.scoreboard.model.OngoingMatch;
 import com.rybindev.scoreboard.service.OngoingMatchesService;
 import com.rybindev.scoreboard.util.JspHelper;
@@ -29,17 +31,18 @@ public class CreateMatchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String fist = req.getParameter("fist");
-        String second = req.getParameter("second");
+        CreateMatchDto createMatchDto = new CreateMatchDto(
+                req.getParameter("first"),
+                req.getParameter("second")
+        );
 
-        if (fist != null && second != null && !fist.equals(second)){
-            OngoingMatch math = ongoingMatchesService.createMath(fist, second);
+        try {
+            OngoingMatch math = ongoingMatchesService.createMath(createMatchDto);
             resp.sendRedirect("match-score?uuid=" + math.getUuid());
-        }else {
-            req.setAttribute("error",true);
+        } catch (ValidationException e) {
+            req.setAttribute("errors", e.getErrors());
             doGet(req, resp);
         }
-
 
 
     }

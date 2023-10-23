@@ -1,5 +1,6 @@
 package com.rybindev.scoreboard.servlet;
 
+import com.rybindev.scoreboard.exception.OngoingMatchNotFoundException;
 import com.rybindev.scoreboard.mapper.ScoreboardMapper;
 import com.rybindev.scoreboard.model.EPlayer;
 import com.rybindev.scoreboard.model.OngoingMatch;
@@ -26,6 +27,7 @@ public class MatchScoreServlet extends HttpServlet {
         scoreboardMapper = (ScoreboardMapper) getServletContext().getAttribute(ScoreboardMapper.class.getName());
 
     }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uuidP = req.getParameter("uuid");
@@ -33,7 +35,7 @@ public class MatchScoreServlet extends HttpServlet {
 
         OngoingMatch match = ongoingMatchesService.findByUuid(uuid);
 
-        req.setAttribute("match",scoreboardMapper.mapFrom(match));
+        req.setAttribute("match", scoreboardMapper.mapFrom(match));
         req.getRequestDispatcher(JspHelper.get("match-score")).forward(req, resp);
     }
 
@@ -45,11 +47,12 @@ public class MatchScoreServlet extends HttpServlet {
         UUID uuid = UUID.fromString(uuidP);
         EPlayer player = EPlayer.valueOf(playerP.toUpperCase());
 
+
         OngoingMatch match = ongoingMatchesService.next(uuid, player);
 
-        req.setAttribute("match",scoreboardMapper.mapFrom(match));
+        req.setAttribute("match", scoreboardMapper.mapFrom(match));
+        req.getRequestDispatcher(JspHelper.get("match-score")).forward(req, resp);
 
-        req.getRequestDispatcher(JspHelper.get("match-score")).forward(req,resp);
 
     }
 }

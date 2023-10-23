@@ -1,4 +1,6 @@
-package com.rybindev.scoreboard.model;
+package com.rybindev.scoreboard.model.score;
+
+import com.rybindev.scoreboard.model.EPlayer;
 
 import java.util.HashMap;
 import java.util.Map;

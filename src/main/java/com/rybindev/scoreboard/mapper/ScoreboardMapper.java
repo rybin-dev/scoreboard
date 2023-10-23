@@ -1,6 +1,6 @@
 package com.rybindev.scoreboard.mapper;
 
-import com.rybindev.scoreboard.model.BaseScore;
+import com.rybindev.scoreboard.model.score.BaseScore;
 import com.rybindev.scoreboard.model.EPlayer;
 import com.rybindev.scoreboard.model.OngoingMatch;
 import com.rybindev.scoreboard.model.Scoreboard;
@@ -23,15 +23,11 @@ public class ScoreboardMapper implements Mapper<OngoingMatch, Scoreboard> {
                         e.getScoreStrung(EPlayer.SECOND)
                 }).toList();
 
-        String[] currentSetScore = {
-                object.getMatchScore().getSet().getScoreStrung(EPlayer.FIRST),
-                object.getMatchScore().getSet().getScoreStrung(EPlayer.SECOND)};
-
         BaseScore game = object.getMatchScore().getSet().getGame();
         String[] gameScore = {
                 game.getScoreStrung(EPlayer.FIRST),
                 game.getScoreStrung(EPlayer.SECOND)};
 
-        return new Scoreboard(names, setScores, gameScore, currentSetScore, object.isFinish());
+        return new Scoreboard(names, setScores, gameScore, object.isFinish());
     }
 }

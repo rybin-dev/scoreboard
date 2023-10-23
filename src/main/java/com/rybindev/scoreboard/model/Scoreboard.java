@@ -11,6 +11,5 @@ public class Scoreboard {
     private String[] names;
     private List<String[]> setScores;
     private String[] gameScore;
-    private String[] currentSetScore;
     private boolean finish;
 }

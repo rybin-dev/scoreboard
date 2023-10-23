@@ -1,5 +1,6 @@
 package com.rybindev.scoreboard.model;
 
+import com.rybindev.scoreboard.model.score.MatchScore;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -27,5 +28,8 @@ public class OngoingMatch {
 
     public boolean isFinish() {
         return matchScore.isFinish();
+    }
+    public boolean isNotFinish() {
+        return !isFinish();
     }
 }

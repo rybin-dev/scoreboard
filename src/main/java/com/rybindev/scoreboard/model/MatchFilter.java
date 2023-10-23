@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MatchFilter {
-    private int page;
+    private int page = 1;
 
     private int limit = 5;
 

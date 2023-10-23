@@ -3,12 +3,16 @@ package com.rybindev.scoreboard.service;
 
 import com.rybindev.scoreboard.entity.Player;
 import com.rybindev.scoreboard.exception.OngoingMatchNotFoundException;
+import com.rybindev.scoreboard.exception.ValidationException;
 import com.rybindev.scoreboard.mapper.MatchMapper;
+import com.rybindev.scoreboard.model.CreateMatchDto;
 import com.rybindev.scoreboard.model.EPlayer;
 import com.rybindev.scoreboard.model.OngoingMatch;
 import com.rybindev.scoreboard.repository.MatchRepository;
 import com.rybindev.scoreboard.repository.OngoingMatchesRepository;
 import com.rybindev.scoreboard.repository.PlayerRepository;
+import com.rybindev.scoreboard.validator.CreateMatchValidator;
+import com.rybindev.scoreboard.validator.ValidationResult;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -21,19 +25,25 @@ public class OngoingMatchesService {
     private final PlayerRepository playerRepository;
     private final MatchRepository matchRepository;
     private final MatchMapper matchMapper;
+    private final CreateMatchValidator createMatchValidator;
 
     @Transactional
-    public OngoingMatch createMath(String name1, String name2) {
+    public OngoingMatch createMath(CreateMatchDto createMatchDto) {
+        ValidationResult validationResult = createMatchValidator.isValid(createMatchDto);
+        if (!validationResult.isValid()){
+            throw new ValidationException(validationResult.getErrors());
+        }
+
         Player first = playerRepository
-                .findByName(name1)
-                .orElseGet(() -> playerRepository.save(new Player(name1)));
+                .findByName(createMatchDto.getFirstPlayerName())
+                .orElseGet(() -> playerRepository.save(new Player(createMatchDto.getFirstPlayerName())));
         Player second = playerRepository
-                .findByName(name2)
-                .orElseGet(() -> playerRepository.save(new Player(name2)));
+                .findByName(createMatchDto.getSecondPlayerName())
+                .orElseGet(() -> playerRepository.save(new Player(createMatchDto.getSecondPlayerName())));
 
         OngoingMatch ongoingMatch = new OngoingMatch();
-        ongoingMatch.setName(EPlayer.FIRST, name1);
-        ongoingMatch.setName(EPlayer.SECOND, name2);
+        ongoingMatch.setName(EPlayer.FIRST, createMatchDto.getFirstPlayerName());
+        ongoingMatch.setName(EPlayer.SECOND, createMatchDto.getSecondPlayerName());
 
         ongoingMatchesRepository.save(ongoingMatch);
 
@@ -43,11 +53,13 @@ public class OngoingMatchesService {
     public OngoingMatch next(UUID uuid, EPlayer player) {
         OngoingMatch ongoingMatch = ongoingMatchesRepository
                 .find(uuid)
+                .filter(OngoingMatch::isNotFinish)
                 .orElseThrow(OngoingMatchNotFoundException::new);
 
         if (!ongoingMatch.isFinish()) {
             ongoingMatch.getMatchScore().next(player);
-        } else {
+        }
+        if (ongoingMatch.isFinish()){
             matchRepository.save(matchMapper.mapFrom(ongoingMatch));
             ongoingMatchesRepository.delete(uuid);
         }
@@ -56,10 +68,7 @@ public class OngoingMatchesService {
     }
 
     public OngoingMatch findByUuid(UUID uuid) {
-
-        return ongoingMatchesRepository.find(uuid).orElseThrow();
+        return ongoingMatchesRepository.find(uuid).orElseThrow(OngoingMatchNotFoundException::new);
     }
-
-
 
 }

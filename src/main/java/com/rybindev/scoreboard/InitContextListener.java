@@ -3,6 +3,7 @@ package com.rybindev.scoreboard;
 import com.rybindev.scoreboard.interceptor.TransactionInterceptor;
 import com.rybindev.scoreboard.mapper.MatchDtoMapper;
 import com.rybindev.scoreboard.mapper.MatchMapper;
+import com.rybindev.scoreboard.mapper.PageMatchDtoMapper;
 import com.rybindev.scoreboard.mapper.ScoreboardMapper;
 import com.rybindev.scoreboard.repository.MatchRepository;
 import com.rybindev.scoreboard.repository.OngoingMatchesRepository;
@@ -10,6 +11,7 @@ import com.rybindev.scoreboard.repository.PlayerRepository;
 import com.rybindev.scoreboard.service.MatchService;
 import com.rybindev.scoreboard.service.OngoingMatchesService;
 import com.rybindev.scoreboard.util.HibernateUtil;
+import com.rybindev.scoreboard.validator.CreateMatchValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -32,11 +34,12 @@ public class InitContextListener implements ServletContextListener {
     private final PlayerRepository playerRepository = getPlayerRepositoryProxy();
     private final MatchRepository matchRepository = getMatchRepositoryProxy();
     private final MatchMapper matchMapper = new MatchMapper(playerRepository);
+    private final CreateMatchValidator createMatchValidator = new CreateMatchValidator();
     private final OngoingMatchesRepository ongoingMatchesRepository = new OngoingMatchesRepository();
     private final OngoingMatchesService ongoingMatchesService = getOngoingMatchServiceProxy();
     private final ScoreboardMapper scoreboardMapper = new ScoreboardMapper();
     private final MatchDtoMapper matchDtoMapper = new MatchDtoMapper();
-
+    private final PageMatchDtoMapper pageMatchDtoMapper = new PageMatchDtoMapper(matchDtoMapper);
     private final MatchService matchService = getMatchServiceProxy();
 
 
@@ -98,8 +101,8 @@ public class InitContextListener implements ServletContextListener {
                     .make()
                     .load(Thread.currentThread().getContextClassLoader())
                     .getLoaded()
-                    .getDeclaredConstructor(MatchRepository.class, MatchDtoMapper.class)
-                    .newInstance(matchRepository, matchDtoMapper);
+                    .getDeclaredConstructor(MatchRepository.class, PageMatchDtoMapper.class)
+                    .newInstance(matchRepository, pageMatchDtoMapper);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -116,8 +119,13 @@ public class InitContextListener implements ServletContextListener {
                     .make()
                     .load(Thread.currentThread().getContextClassLoader())
                     .getLoaded()
-                    .getDeclaredConstructor(OngoingMatchesRepository.class, PlayerRepository.class, MatchRepository.class, MatchMapper.class)
-                    .newInstance(ongoingMatchesRepository, playerRepository, matchRepository, matchMapper);
+                    .getDeclaredConstructor(
+                            OngoingMatchesRepository.class,
+                            PlayerRepository.class,
+                            MatchRepository.class,
+                            MatchMapper.class,
+                            CreateMatchValidator.class)
+                    .newInstance(ongoingMatchesRepository, playerRepository, matchRepository, matchMapper, createMatchValidator);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
