@@ -7,31 +7,64 @@ import org.junit.jupiter.api.Test;
 class GameScoreTest {
 
     @Test
-    void shouldWinTheFirstPlayer() {
+    void shouldNotEndWhenTheScoreIs3_3() {
+        GameScore game = new GameScore();
+
+        for (int i = 0; i < 3; i++) {
+            Assertions.assertFalse(game.isFinish());
+            game.next(EPlayer.FIRST);
+            game.next(EPlayer.SECOND);
+
+        }
+        Assertions.assertFalse(game.isFinish());
+    }
+    @Test
+    void shouldNotEdWithTheScore3_4() {
         GameScore game = new GameScore();
 
         for (int i = 0; i < 4; i++) {
             Assertions.assertFalse(game.isFinish());
-            game.next(EPlayer.FIRST);
+            if (i < 3) {
+                game.next(EPlayer.FIRST);
+            }
+            game.next(EPlayer.SECOND);
 
         }
-
-        Assertions.assertTrue(game.isFinish());
-        Assertions.assertEquals(EPlayer.FIRST,game.getWinner());
+        Assertions.assertFalse(game.isFinish());
     }
 
     @Test
-    void shouldWinTheSecondPlayer() {
+    void shouldNotEdWithTheScore4_3() {
         GameScore game = new GameScore();
 
         for (int i = 0; i < 4; i++) {
             Assertions.assertFalse(game.isFinish());
-            game.next(EPlayer.SECOND);
+            if (i < 3) {
+                game.next(EPlayer.SECOND);
+            }
+            game.next(EPlayer.FIRST);
+
+        }
+        Assertions.assertFalse(game.isFinish());
+    }
+    @Test
+    void shouldEndWhenThePlayerGets4Points() {
+        GameScore game1 = new GameScore();
+        GameScore game2 = new GameScore();
+
+        for (int i = 0; i < 4; i++) {
+            Assertions.assertFalse(game1.isFinish());
+            Assertions.assertFalse(game2.isFinish());
+            game1.next(EPlayer.FIRST);
+            game2.next(EPlayer.SECOND);
+
         }
 
-        Assertions.assertTrue(game.isFinish());
-        Assertions.assertEquals(EPlayer.SECOND,game.getWinner());
+        Assertions.assertTrue(game1.isFinish());
+        Assertions.assertTrue(game2.isFinish());
     }
+
+
 
 
 }

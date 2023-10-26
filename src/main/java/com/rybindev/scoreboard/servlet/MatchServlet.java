@@ -28,8 +28,8 @@ public class MatchServlet extends HttpServlet {
 
         MatchFilter matchFilter = new MatchFilter();
 
-        if (page != null && page.matches("\\d{1,9}+")) {
-            matchFilter.setPage(Integer.parseInt(page));
+        if (page != null && page.matches("\\d+")) {
+            matchFilter.setPage(Math.max(1,Integer.parseInt(page)));
         }
         if (playerName != null && !playerName.isEmpty()) {
             matchFilter.setPlayerName(playerName.trim());

@@ -1,6 +1,5 @@
 package com.rybindev.scoreboard.servlet;
 
-import com.rybindev.scoreboard.exception.OngoingMatchNotFoundException;
 import com.rybindev.scoreboard.mapper.ScoreboardMapper;
 import com.rybindev.scoreboard.model.EPlayer;
 import com.rybindev.scoreboard.model.OngoingMatch;
