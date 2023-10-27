@@ -15,11 +15,9 @@
 
 <main class="container">
 
-    <h1>Matches</h1>
-
+    <h1>Matches - ${requestScope.pageMatch.count}</h1>
     <table class="table">
         <thead>
-        <tr>
             <th colspan="4" scope="col">
                 <form class="d-flex" method="get">
                     <input class="form-control me-2" name="playerName" type="search" placeholder="Поиск"
@@ -29,6 +27,7 @@
             </th>
         </tr>
         </thead>
+
         <tbody>
         <c:forEach var="match" items="${requestScope.pageMatch.matches}">
             <tr>
@@ -47,10 +46,10 @@
 
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-start">
-            <c:if test="${requestScope.pageMatch.page - 2 >= 1 }">
+            <c:if test="${requestScope.pageMatch.page - 1 >= 1 }">
                 <li class="page-item">
                     <a class="page-link"
-                       href="${pageContext.request.contextPath}/matches?page=${requestScope.pageMatch.page - 2}<c:if test="${param.playerName != null}">&playerName=${param.playerName}</c:if>">
+                       href="${pageContext.request.contextPath}/matches?page=${requestScope.pageMatch.page - 1}<c:if test="${param.playerName != null}">&playerName=${param.playerName}</c:if>">
                         Previous
                     </a>
                 </li>
@@ -89,10 +88,10 @@
                 </c:if>
             </c:forEach>
 
-            <c:if test="${requestScope.pageMatch.page + 3 <= requestScope.pageMatch.countPage }">
+            <c:if test="${requestScope.pageMatch.page + 1 <= requestScope.pageMatch.countPage }">
                 <li class="page-item">
                     <a class="page-link"
-                       href="${pageContext.request.contextPath}/matches?page=${requestScope.pageMatch.page + 3}
+                       href="${pageContext.request.contextPath}/matches?page=${requestScope.pageMatch.page + 1}
                             <c:if test="${param.playerName != null}" >&playerName=${param.playerName}</c:if>">
                         Next
                     </a>

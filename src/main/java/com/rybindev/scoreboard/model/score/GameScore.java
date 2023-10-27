@@ -7,8 +7,8 @@ public class GameScore extends BaseScore {
     private static final String[] POINTS_GAME = new String[]{"0", "15", "30", "40", "AD"};
 
     public void next(EPlayer player) {
-        int score = playerScores.get(player);
-        int oppositeScore = playerScores.get(player.getOpposite());
+        int score = getScore(player);
+        int oppositeScore = getScore(player.getOpposite());
 
         if ((score == 3 || score == 4) && oppositeScore < score) {
             winner = player;

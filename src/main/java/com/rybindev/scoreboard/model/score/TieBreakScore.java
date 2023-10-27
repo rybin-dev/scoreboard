@@ -5,8 +5,8 @@ import com.rybindev.scoreboard.model.EPlayer;
 public class TieBreakScore extends BaseScore {
 
     public void next(EPlayer player) {
-        int score = playerScores.get(player);
-        int oppositeScore = playerScores.get(player.getOpposite());
+        int score = getScore(player);
+        int oppositeScore = getScore(player.getOpposite());
 
         if (score >= 6 && oppositeScore < score) {
             winner = player;

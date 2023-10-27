@@ -17,8 +17,8 @@ public class SetScore extends BaseScore {
             return;
         }
 
-        int score = playerScores.get(player);
-        int oppositeScore = playerScores.get(player.getOpposite());
+        int score = getScore(player);
+        int oppositeScore = getScore(player.getOpposite());
 
 
         if (score == 5 && oppositeScore == 6) {

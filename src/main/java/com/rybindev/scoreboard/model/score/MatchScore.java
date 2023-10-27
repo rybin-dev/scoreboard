@@ -26,7 +26,7 @@ public class MatchScore extends BaseScore {
                 return;
             }
 
-            int score = playerScores.get(player);
+            int score = getScore(player);
 
             if (score == 1) {
                 winner = player;

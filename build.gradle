@@ -17,6 +17,10 @@ repositories {
 ext {
     junitVersion = '5.9.2'
     lombokVersion = '1.18.30'
+    assertjVersion = '3.24.2'
+    mockitoVersion = '5.6.0'
+    hibernateVersion = '6.1.7.Final'
+    h2Version = '2.2.224'
 }
 
 sourceCompatibility = '17'
@@ -28,8 +32,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 
-    implementation 'org.hibernate:hibernate-core:6.1.7.Final'
-    implementation 'com.h2database:h2:2.2.224'
+    implementation "org.hibernate:hibernate-core:${hibernateVersion}"
+    implementation "com.h2database:h2:${h2Version}"
     implementation 'net.bytebuddy:byte-buddy-gradle-plugin:1.12.18'
 
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
@@ -44,8 +48,13 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
+
 }
 
 test {
